@@ -10,209 +10,342 @@ import { uuid } from "zod/v4";
 const server = new McpServer({
   name: "aitoearn-mcp-server",
   version: "1.0.0",
+  description: "AiToEarn MCP Server - Provides social media publishing and account management capabilities for AI-driven content creation and automation",
   capabilities: {
     resources: {},
-    tools: {},
+    tools: {
+      "get-account-list": {
+        description: "Retrieve list of accounts associated with an API key"
+      },
+      "create-publish": {
+        description: "Create and publish content to a specific social media account"
+      },
+      "create-publish-list": {
+        description: "Batch publish content to multiple accounts simultaneously"
+      }
+    },
   },
 });
 
 /**
- * 获取账户列表
- * @param skKey 账号关联的skKey
- * @returns 账户列表
+ * Get Account List Tool
+ * Retrieves a list of social media accounts associated with the provided API key
+ * @param skKey - The secret key associated with the user's account
+ * @returns Array of account objects with account IDs and metadata
  */
 server.tool(
   "get-account-list",
   {
-    skKey: z.string().describe("账号关联的skKey"),
+    skKey: z.string().describe("Secret key (API key) associated with the user's account for authentication"),
   },
   {
-    title: "获取账户列表",
-    description: "根据skKey获取关联的账户列表",
+    title: "Get Account List",
+    description: "Retrieve a comprehensive list of social media accounts linked to the provided API key. Returns account IDs, titles, and associated metadata for content publishing operations.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        skKey: {
+          type: "string",
+          description: "The secret key (API key) for account authentication"
+        }
+      },
+      required: ["skKey"]
+    }
   },
   async (data) => {
-    const accountList = await getAccountList(data.skKey);
+    try {
+      const accountList = await getAccountList(data.skKey);
 
-    if (!accountList) {
+      if (!accountList) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "Error: Unable to retrieve account data. Please verify your API key and try again.",
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      if (accountList.length === 0) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `No accounts found for the provided API key: ${data.skKey}. Please ensure you have accounts linked to this key.`,
+            },
+          ],
+        };
+      }
+
+      const resContent: CallToolResult = {
+        content: [
+          {
+            type: "text",
+            text: `Found ${accountList.length} account(s):`,
+          },
+        ],
+      };
+
+      for (const account of accountList) {
+        resContent.content.push({
+          type: "text",
+          text: `Account ID: ${account.accountId} | Title: ${account.title || 'N/A'}`,
+        });
+      }
+
+      return resContent;
+    } catch (error) {
       return {
         content: [
           {
             type: "text",
-            text: "未能检索账户数据",
+            text: `Error retrieving account list: ${error instanceof Error ? error.message : 'Unknown error occurred'}`,
           },
         ],
+        isError: true,
       };
     }
-
-    if (accountList.length === 0) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: `No accounts found for ${data.skKey}`,
-          },
-        ],
-      };
-    }
-
-    const resContent: CallToolResult = {
-      content: [],
-    }
-
-    for (const account of accountList) {
-      resContent.content.push({
-        type: "text",
-        text: account.accountId,
-      })
-    }
-
-    return resContent
   },
 );
 
 /**
- *  发布
+ * Create Publish Tool
+ * Creates and publishes content to a specific social media account
+ * Supports both video content (requires videoUrl) and article content (requires imgUrlList)
  */
 server.tool(
   "create-publish",
   {
-    skKey: z.string().describe("账号关联的skKey"),
-    accountId: z.string({ required_error: '账户ID' }).describe("账号ID"),
-    type: z.nativeEnum(PublishType, { required_error: '类型' }).describe("类型"),
-    title: z.string().describe("标题"),
-    desc: z.string().nullable().optional().transform(val => !val ? undefined : val).describe("描述"),
-    videoUrl: z.string().nullable().optional().transform(val => !val ? undefined : val),
-    coverUrl: z.string().describe("封面"),
-    imgUrlList: z.string().nullable().optional().transform(val => !val ? undefined : val.split(',')),
-    publishTime: z.string().nullable().optional().transform(val => !val ? undefined : val),
-    topics: z.string(),
+    skKey: z.string().describe("Secret key (API key) for account authentication"),
+    accountId: z.string({ required_error: 'Account ID is required' }).describe("Target social media account ID for publishing"),
+    type: z.nativeEnum(PublishType, { required_error: 'Content type is required' }).describe("Content type: 'video' for video content or 'article' for article content"),
+    title: z.string().describe("Title or headline for the published content"),
+    desc: z.string().nullable().optional().transform(val => !val ? undefined : val).describe("Optional description or caption for the content"),
+    videoUrl: z.string().nullable().optional().transform(val => !val ? undefined : val).describe("Video file URL (required for video type content)"),
+    coverUrl: z.string().describe("Cover image URL for the content thumbnail"),
+    imgUrlList: z.string().nullable().optional().transform(val => !val ? undefined : val.split(',')).describe("Comma-separated list of image URLs (required for article type content)"),
+    publishTime: z.string().nullable().optional().transform(val => !val ? undefined : val).describe("Optional scheduled publish time in format 'YYYY-MM-DD HH:mm:ss'"),
+    topics: z.string().describe("Comma-separated list of topics or hashtags for content categorization"),
   },
   {
-    title: "创建发布",
-    description: "根据经纬度创建发布内容",
+    title: "Create Content Publication",
+    description: "Create and publish content to a specific social media account. Supports video content (requires videoUrl) and article content (requires imgUrlList). Validates content type requirements automatically.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        skKey: { type: "string", description: "Authentication API key" },
+        accountId: { type: "string", description: "Target account ID" },
+        type: { type: "string", enum: ["video", "article"], description: "Content type" },
+        title: { type: "string", description: "Content title" },
+        desc: { type: "string", description: "Content description" },
+        videoUrl: { type: "string", description: "Video URL (required for video type)" },
+        coverUrl: { type: "string", description: "Cover image URL" },
+        imgUrlList: { type: "string", description: "Comma-separated image URLs (required for article type)" },
+        publishTime: { type: "string", description: "Scheduled publish time" },
+        topics: { type: "string", description: "Topics and hashtags" }
+      },
+      required: ["skKey", "accountId", "type", "title", "coverUrl", "topics"]
+    }
   },
   async (data) => {
-    // Conditional validation based on type
-    if (data.type === PublishType.VIDEO && !data.videoUrl) {
+    try {
+      // Conditional validation based on type
+      if (data.type === PublishType.VIDEO && !data.videoUrl) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "Validation Error: VIDEO content type requires a valid videoUrl parameter. Please provide the video file URL.",
+            },
+          ],
+          isError: true,
+        };
+      }
+      
+      if (data.type === PublishType.ARTICLE && !data.imgUrlList) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "Validation Error: ARTICLE content type requires imgUrlList parameter. Please provide a comma-separated list of image URLs.",
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      const flowId = `mcp_${uuid()}`;
+      const res = await publishCreate(data.skKey, {
+        flowId,
+        ...data
+      });
+
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: `Content published successfully! Flow ID: ${flowId}. Result: ${JSON.stringify(res)}`,
+          }
+        ],
+      };
+    } catch (error) {
       return {
         content: [
           {
             type: "text",
-            text: "ERROR: VIDEO类型需要提供videoUrl",
+            text: `Error creating publication: ${error instanceof Error ? error.message : 'Unknown error occurred'}`,
           },
         ],
+        isError: true,
       };
     }
-    
-    if (data.type === PublishType.ARTICLE && !data.imgUrlList) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: "ERROR: ARTICLE类型需要提供imgUrlList",
-          },
-        ],
-      };
-    }
-
-    const flowId = `mcp_${uuid()}`
-    const res = await publishCreate(data.skKey, {
-      flowId,
-      ...data
-    });
-
-    return {
-      content: [
-        {
-          type: "text" as const,
-          text: `Created publish result: ${res}`,
-        }
-      ],
-    };
   },
 );
 
+/**
+ * Batch Publish Tool
+ * Creates and publishes the same content to multiple social media accounts simultaneously
+ * Automatically retrieves all accounts associated with the API key and publishes to each
+ */
 server.tool(
   "create-publish-list",
   {
-    skKey: z.string().describe("账号关联的skKey"),
-    type: z.nativeEnum(PublishType, { required_error: '类型' }).describe("类型"),
-    title: z.string().describe("标题"),
-    desc: z.string().nullable().optional().transform(val => !val ? undefined : val).describe("描述"),
-    videoUrl: z.string().nullable().optional().transform(val => !val ? undefined : val),
-    coverUrl: z.string().describe("封面"),
-    imgUrlList: z.string().nullable().optional().transform(val => !val ? undefined : val.split(',')),
-    publishTime: z.string().nullable().optional().transform(val => !val ? undefined : val),
-    topics: z.string(),
+    skKey: z.string().describe("Secret key (API key) for account authentication"),
+    type: z.nativeEnum(PublishType, { required_error: 'Content type is required' }).describe("Content type: 'video' for video content or 'article' for article content"),
+    title: z.string().describe("Title or headline for the published content"),
+    desc: z.string().nullable().optional().transform(val => !val ? undefined : val).describe("Optional description or caption for the content"),
+    videoUrl: z.string().nullable().optional().transform(val => !val ? undefined : val).describe("Video file URL (required for video type content)"),
+    coverUrl: z.string().describe("Cover image URL for the content thumbnail"),
+    imgUrlList: z.string().nullable().optional().transform(val => !val ? undefined : val.split(',')).describe("Comma-separated list of image URLs (required for article type content)"),
+    publishTime: z.string().nullable().optional().transform(val => !val ? undefined : val).describe("Optional scheduled publish time in format 'YYYY-MM-DD HH:mm:ss'"),
+    topics: z.string().describe("Comma-separated list of topics or hashtags for content categorization"),
   },
   {
-    title: "创建发布",
-    description: "根据skKey批量发布",
+    title: "Batch Content Publication",
+    description: "Create and publish the same content to all social media accounts associated with the provided API key. Performs bulk publishing operation with individual success/failure reporting for each account.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        skKey: { type: "string", description: "Authentication API key" },
+        type: { type: "string", enum: ["video", "article"], description: "Content type" },
+        title: { type: "string", description: "Content title" },
+        desc: { type: "string", description: "Content description" },
+        videoUrl: { type: "string", description: "Video URL (required for video type)" },
+        coverUrl: { type: "string", description: "Cover image URL" },
+        imgUrlList: { type: "string", description: "Comma-separated image URLs (required for article type)" },
+        publishTime: { type: "string", description: "Scheduled publish time" },
+        topics: { type: "string", description: "Topics and hashtags" }
+      },
+      required: ["skKey", "type", "title", "coverUrl", "topics"]
+    }
   },
   async (data) => {
-    // Conditional validation based on type
-    if (data.type === PublishType.VIDEO && !data.videoUrl) {
-      return {
+    try {
+      // Conditional validation based on type
+      if (data.type === PublishType.VIDEO && !data.videoUrl) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "Validation Error: VIDEO content type requires a valid videoUrl parameter. Please provide the video file URL.",
+            },
+          ],
+          isError: true,
+        };
+      }
+      
+      if (data.type === PublishType.ARTICLE && !data.imgUrlList) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "Validation Error: ARTICLE content type requires imgUrlList parameter. Please provide a comma-separated list of image URLs.",
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      const accountList = await getAccountList(data.skKey);
+
+      if (!accountList) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "Error: Unable to retrieve account data. Please verify your API key and try again.",
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      if (accountList.length === 0) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "No accounts found for the provided API key. Please ensure you have accounts linked to this key.",
+            },
+          ],
+        };
+      }
+
+      const resContent: CallToolResult = {
         content: [
           {
             type: "text",
-            text: "ERROR: VIDEO类型需要提供videoUrl",
+            text: `Starting batch publication to ${accountList.length} account(s)...`,
           },
         ],
       };
-    }
-    
-    if (data.type === PublishType.ARTICLE && !data.imgUrlList) {
-      return {
-        content: [
-          {
+
+      let successCount = 0;
+      let failureCount = 0;
+
+      for (let i = 0; i < accountList.length; i++) {
+        const account = accountList[i];
+        try {
+          const flowId = `mcp_batch_${i + 1}_${uuid()}`;
+          await publishCreate(data.skKey, { 
+            flowId, 
+            accountId: account.accountId, 
+            ...data 
+          });
+          
+          resContent.content.push({
             type: "text",
-            text: "ERROR: ARTICLE类型需要提供imgUrlList",
-          },
-        ],
-      };
-    }
-
-    const accountList = await getAccountList(data.skKey);
-
-    if (!accountList) {
-      return {
-        content: [
-          {
+            text: `SUCCESS: ${account.title || account.accountId} - Published successfully (Flow: ${flowId})`,
+          });
+          successCount++;
+        } catch (error) {
+          resContent.content.push({
             type: "text",
-            text: "未能检索账户数据",
-          },
-        ],
-      };
-    }
+            text: `FAILED: ${account.title || account.accountId} - ${error instanceof Error ? error.message : 'Unknown error'}`,
+          });
+          failureCount++;
+        }
+      }
 
-    const resContent: CallToolResult = {
-      content: [
-        {
-          type: "text",
-          text: "开始发布",
-        },
-      ],
-    }
-
-    let index = 1;
-    for (const account of accountList) {
-      const flowId = `mcp_${index += 1}_${uuid()}`
-      const ret = await publishCreate(data.skKey, { flowId, accountId: account.accountId, ...data });
       resContent.content.push({
         type: "text",
-        text: `${account.title} 发布结果: ${ret.message}`,
+        text: `Batch publication completed. Success: ${successCount}, Failed: ${failureCount}`,
       });
-    }
 
-    return {
-      content: [
-        {
-          type: "text",
-          text: `Created publish for location: ${1}`,
-        }
-      ],
-    };
+      return resContent;
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Error during batch publication: ${error instanceof Error ? error.message : 'Unknown error occurred'}`,
+          },
+        ],
+        isError: true,
+      };
+    }
   },
 );
 
