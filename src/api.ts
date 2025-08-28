@@ -8,7 +8,7 @@ const BASE_URL = 'https://mcp.dev.aitoearn.ai';
  * @param skKey 
  * @returns 
  */
-export async function getAccountList(skKey: string): Promise<SkKeyRefAccount[] | null> {
+export async function apiGetAccountList(skKey: string): Promise<SkKeyRefAccount[] | null> {
     try {
         const response = await fetch(`${BASE_URL}/plugin/account/list`, {
             method: 'GET',
@@ -38,7 +38,7 @@ export async function getAccountList(skKey: string): Promise<SkKeyRefAccount[] |
 }
 
 // 进行某个账号的发布
-export async function publishCreate(skKey: string, newData: NewPublishData) {
+export async function apiPublishCreate(skKey: string, newData: NewPublishData) {
     try {
         const response = await fetch(`${BASE_URL}/plugin/publish/create`, {
             method: 'POST',
