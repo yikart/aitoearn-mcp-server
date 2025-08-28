@@ -108,10 +108,10 @@ export default function init() {
                 let successCount = 0;
                 let failureCount = 0;
 
+                const flowId = `mcp_${uuid()}`;
                 for (let i = 0; i < accountList.length; i++) {
                     const account = accountList[i];
                     try {
-                        const flowId = `mcp_batch_${i + 1}_${uuid()}`;
                         await apiPublishCreate(data.skKey, {
                             flowId,
                             accountId: account.accountId,
