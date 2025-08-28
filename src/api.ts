@@ -1,4 +1,4 @@
-import { NewPublishData } from "./common.js";
+import { NewPublishData, SkKeyRefAccount } from "./common.js";
 
 // const BASE_URL = 'https://mcp.aitoearn.ai';
 const BASE_URL = 'https://mcp.dev.aitoearn.ai';
@@ -8,7 +8,7 @@ const BASE_URL = 'https://mcp.dev.aitoearn.ai';
  * @param skKey 
  * @returns 
  */
-export async function getAccountList(skKey: string): Promise<NewPublishData[] | null> {
+export async function getAccountList(skKey: string): Promise<SkKeyRefAccount[] | null> {
     try {
         const response = await fetch(`${BASE_URL}/plugin/account/list`, {
             method: 'GET',
@@ -22,8 +22,15 @@ export async function getAccountList(skKey: string): Promise<NewPublishData[] | 
             throw new Error(`Failed to fetch account list: ${response.status} ${response.statusText}`);
         }
 
-        const data = await response.json();
-        return data.accounts || [];
+        const data: {
+            data: SkKeyRefAccount[];
+            code: number;
+            message: string;
+        } = await response.json();
+        if (data.code) {
+            throw new Error(`Failed to fetch account list: ${data.message}`);
+        }
+        return data.data || [];
     } catch (error) {
         console.error('Error fetching account list:', error);
         throw error;

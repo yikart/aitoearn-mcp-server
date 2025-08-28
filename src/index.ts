@@ -91,7 +91,7 @@ server.tool(
       for (const account of accountList) {
         resContent.content.push({
           type: "text",
-          text: `Account ID: ${account.accountId} | Title: ${account.title || 'N/A'}`,
+          text: `Account ID: ${account.accountId} | Type: ${account.accountType || ''}`,
         });
       }
 
@@ -163,7 +163,7 @@ server.tool(
           isError: true,
         };
       }
-      
+
       if (data.type === PublishType.ARTICLE && !data.imgUrlList) {
         return {
           content: [
@@ -255,7 +255,7 @@ server.tool(
           isError: true,
         };
       }
-      
+
       if (data.type === PublishType.ARTICLE && !data.imgUrlList) {
         return {
           content: [
@@ -309,21 +309,21 @@ server.tool(
         const account = accountList[i];
         try {
           const flowId = `mcp_batch_${i + 1}_${uuid()}`;
-          await publishCreate(data.skKey, { 
-            flowId, 
-            accountId: account.accountId, 
-            ...data 
+          await publishCreate(data.skKey, {
+            flowId,
+            accountId: account.accountId,
+            ...data
           });
-          
+
           resContent.content.push({
             type: "text",
-            text: `SUCCESS: ${account.title || account.accountId} - Published successfully (Flow: ${flowId})`,
+            text: `SUCCESS: ${account.accountType} - ${account.accountId} - Published successfully (Flow: ${flowId})`,
           });
           successCount++;
         } catch (error) {
           resContent.content.push({
             type: "text",
-            text: `FAILED: ${account.title || account.accountId} - ${error instanceof Error ? error.message : 'Unknown error'}`,
+            text: `FAILED: ${account.accountType} - ${account.accountId} - ${error instanceof Error ? error.message : 'Unknown error'}`,
           });
           failureCount++;
         }
@@ -351,12 +351,22 @@ server.tool(
 
 
 async function main() {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-  console.error("AiToEarn MCP running on stdio");
+  try {
+    const transport = new StdioServerTransport();
+    await server.connect(transport);
+    console.log("AiToEarn MCP running on stdio");
+  } catch (error) {
+    console.error("AiToEarn MCP error:", error);
+  }
+
 }
 
 main().catch((error) => {
   console.error("Fatal error in main():", error);
   process.exit(1);
 });
+
+// function test() {
+//   getAccountList('sk-oAntzZ8Avynq7WEnhVDQwCiEokvuaaXP')
+// }
+// test()
