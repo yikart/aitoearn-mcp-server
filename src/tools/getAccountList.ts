@@ -1,10 +1,10 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { apiGetAccountList } from "../api.js";
+import { server } from "../server.js";
 
 
-export default function init(server: McpServer) {
+export default function init() {
     /**
     * get-account-list
     * Get Account List

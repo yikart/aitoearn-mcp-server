@@ -1,6 +1,6 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { server } from "../server.js";
 
-export default function init(server: McpServer) {
+export default function init() {
     /**
      * Open AiToEarn Website Tool
      * Provides instructions and URL to open the AiToEarn platform

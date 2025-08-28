@@ -1,11 +1,11 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { PublishType } from "../common.js";
 import { apiPublishCreate } from "../api.js";
 import { uuid } from "zod/v4";
+import { server } from "../server.js";
 
 
-export default function init(server: McpServer) {
+export default function init() {
     /**
      * Create Publish Tool
      * Creates and publishes content to a specific social media account

@@ -1,12 +1,12 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { PublishType } from "../common.js";
 import { apiGetAccountList, apiPublishCreate } from "../api.js";
 import { uuid } from "zod/v4";
 import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+import { server } from "../server.js";
 
 
-export default function init(server: McpServer) {
+export default function init() {
     /**
      * Batch Publish Tool
      * Creates and publishes the same content to multiple social media accounts simultaneously
