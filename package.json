@@ -1,10 +1,9 @@
 {
-  "name": "aitoearn-mcp-server",
+  "name": "aitoearn-mcp",
   "version": "1.0.0",
-  "description": "AiToEarn MCP Server - A Model Context Protocol server for social media publishing and account management",
+  "description": "AiToEarn MCP - A Model Context Protocol server for social media publishing and account management",
   "main": "build/index.js",
   "bin": {
-    "aitoearn-mcp-server": "build/index.js",
     "aitoearn-mcp": "build/index.js"
   },
   "scripts": {
@@ -41,11 +40,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yikart/aitoearn-mcp-server.git"
+    "url": "git+https://github.com/yikart/aitoearn-mcp.git"
   },
-  "homepage": "https://github.com/yikart/aitoearn-mcp-server#readme",
+  "homepage": "https://github.com/yikart/aitoearn-mcp#readme",
   "bugs": {
-    "url": "https://github.com/yikart/aitoearn-mcp-server/issues"
+    "url": "https://github.com/yikart/aitoearn-mcp/issues"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.4",

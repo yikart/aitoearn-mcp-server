@@ -1,4 +1,4 @@
-# AiToEarn MCP Server
+# AiToEarn MCP
 
 A Model Context Protocol (MCP) server that provides social media publishing and account management capabilities for AI-driven content creation and automation.
 
@@ -21,7 +21,7 @@ A Model Context Protocol (MCP) server that provides social media publishing and 
 ### Via npm (Recommended)
 
 ```bash
-npm install aitoearn-mcp-server
+npm install aitoearn-mcp
 ```
 
 ### Via GitHub
@@ -29,7 +29,7 @@ npm install aitoearn-mcp-server
 1. Clone the repository:
 ```bash
 git clone https://github.com/aitoearn/aitoearn-mcp-server.git
-cd aitoearn-mcp-server
+cd aitoearn-mcp
 ```
 
 2. Install dependencies:
@@ -48,16 +48,16 @@ npm run build
 
 After installing globally:
 ```bash
-npm install -g aitoearn-mcp-server
-aitoearn-mcp-server
+npm install -g aitoearn-mcp
+aitoearn-mcp
 ```
 
 ### Using as a Local Package
 
 After installing locally:
 ```bash
-npm install aitoearn-mcp-server
-npx aitoearn-mcp-server
+npm install aitoearn-mcp
+npx aitoearn-mcp
 ```
 
 ### Programmatic Usage
@@ -66,7 +66,7 @@ npx aitoearn-mcp-server
 import { spawn } from 'child_process';
 
 // Start the MCP server as a subprocess
-const server = spawn('npx', ['aitoearn-mcp-server']);
+const server = spawn('npx', ['aitoearn-mcp']);
 
 server.stdout.on('data', (data) => {
   console.log(`Server: ${data}`);
@@ -108,7 +108,7 @@ Add the server configuration to your Claude Desktop config file:
   "mcpServers": {
     "aitoearn": {
       "command": "npx",
-      "args": ["aitoearn-mcp-server"]
+      "args": ["aitoearn-mcp"]
     }
   }
 }
@@ -120,7 +120,7 @@ Or if installed globally:
 {
   "mcpServers": {
     "aitoearn": {
-      "command": "aitoearn-mcp-server"
+      "command": "aitoearn-mcp"
     }
   }
 }

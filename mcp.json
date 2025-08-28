@@ -1,13 +1,13 @@
 {
-  "name": "aitoearn-mcp-server",
+  "name": "aitoearn-mcp",
   "version": "1.0.0",
   "description": "AiToEarn MCP Server - A Model Context Protocol server for social media publishing and account management",
   "author": "AiToEarn Team",
   "license": "MIT",
-  "homepage": "https://github.com/aitoearn/aitoearn-mcp-server",
+  "homepage": "https://github.com/yikart/aitoearn-mcp",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aitoearn/aitoearn-mcp-server.git"
+    "url": "https://github.com/yikart/aitoearn-mcp.git"
   },
   "icon": "🚀",
   "categories": [

@@ -8,7 +8,7 @@ import { uuid } from "zod/v4";
 
 
 const server = new McpServer({
-  name: "aitoearn-mcp-server",
+  name: "aitoearn-mcp",
   version: "1.0.0",
   description: "AiToEarn MCP Server - Provides social media publishing and account management capabilities for AI-driven content creation and automation",
   capabilities: {
@@ -353,7 +353,7 @@ server.tool(
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("AiToEarn MCP Server running on stdio");
+  console.error("AiToEarn MCP running on stdio");
 }
 
 main().catch((error) => {
