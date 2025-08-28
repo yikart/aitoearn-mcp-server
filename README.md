@@ -108,7 +108,7 @@ Add the server configuration to your Claude Desktop config file:
   "mcpServers": {
     "aitoearn": {
       "command": "npx",
-      "args": ["aitoearn-mcp-server"],
+      "args": ["aitoearn-mcp-server"]
     }
   }
 }
@@ -120,7 +120,7 @@ Or if installed globally:
 {
   "mcpServers": {
     "aitoearn": {
-      "command": "aitoearn-mcp",
+      "command": "aitoearn-mcp-server"
     }
   }
 }
