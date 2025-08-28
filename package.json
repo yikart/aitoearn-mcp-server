@@ -7,7 +7,7 @@
     "aitoearn-mcp": "build/index.js"
   },
   "scripts": {
-    "build": "tsc && chmod 755 build/index.js",
+    "build": "tsc && node scripts/add-shebang.cjs && chmod 755 build/index.js",
     "start": "node build/index.js",
     "dev": "tsc && node build/index.js",
     "prepare": "npm run build",

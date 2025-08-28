@@ -3,6 +3,9 @@ src/
 *.ts
 !*.d.ts
 
+# Build scripts
+scripts/
+
 # Development files
 .git/
 .gitignore
