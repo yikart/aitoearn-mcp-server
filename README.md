@@ -18,6 +18,14 @@ A Model Context Protocol (MCP) server that provides social media publishing and 
 
 ## 🛠️ Installation
 
+### Via npm (Recommended)
+
+```bash
+npm install aitoearn-mcp-server
+```
+
+### Via GitHub
+
 1. Clone the repository:
 ```bash
 git clone https://github.com/aitoearn/aitoearn-mcp-server.git
@@ -35,6 +43,35 @@ npm run build
 ```
 
 ## 🔧 Usage
+
+### Using as a Global CLI Tool
+
+After installing globally:
+```bash
+npm install -g aitoearn-mcp-server
+aitoearn-mcp-server
+```
+
+### Using as a Local Package
+
+After installing locally:
+```bash
+npm install aitoearn-mcp-server
+npx aitoearn-mcp-server
+```
+
+### Programmatic Usage
+
+```javascript
+import { spawn } from 'child_process';
+
+// Start the MCP server as a subprocess
+const server = spawn('npx', ['aitoearn-mcp-server']);
+
+server.stdout.on('data', (data) => {
+  console.log(`Server: ${data}`);
+});
+```
 
 ### Running the MCP Server
 
@@ -56,6 +93,43 @@ Retrieve a list of social media accounts associated with your API key.
   "skKey": "sk-YOUR_API_KEY_HERE"
 }
 ```
+
+### MCP Client Configuration
+
+#### Claude Desktop
+
+Add the server configuration to your Claude Desktop config file:
+
+**macOS/Linux:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows:** `%APPDATA%/Claude/claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "aitoearn": {
+      "command": "npx",
+      "args": ["aitoearn-mcp-server"],
+    }
+  }
+}
+```
+
+Or if installed globally:
+
+```json
+{
+  "mcpServers": {
+    "aitoearn": {
+      "command": "aitoearn-mcp",
+    }
+  }
+}
+```
+
+#### Other MCP Clients
+
+For other MCP clients, refer to their documentation on how to configure MCP servers. The server runs over stdio transport.
+
 
 #### 2. create-publish
 Create and publish content to a specific social media account.
