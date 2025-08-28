@@ -45,6 +45,11 @@
         "name": "create-publish-list",
         "description": "Batch publish content to multiple accounts simultaneously",
         "category": "batch-operations"
+      },
+      {
+        "name": "open-aitoearn-website",
+        "description": "Open the AiToEarn platform website for account management and platform access",
+        "category": "platform-access"
       }
     ]
   },

@@ -1,0 +1,1 @@
+npm run build && npm uninstall -g aitoearn-mcp && npm install -g .

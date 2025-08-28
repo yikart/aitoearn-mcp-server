@@ -178,6 +178,25 @@ Batch publish content to all accounts associated with your API key.
 **Parameters:**
 Same as `create-publish` except `accountId` is not required (publishes to all accounts).
 
+#### 4. open-aitoearn-website
+Open the AiToEarn platform website for account management and platform access.
+
+**Parameters:**
+None required.
+
+**Example:**
+```json
+{}
+```
+
+**Description:**
+This tool provides information about the AiToEarn platform (https://aitoearn.ai) including:
+- Account management and configuration
+- Content creation and scheduling  
+- Analytics and performance tracking
+- API key management
+- Social media account integration
+
 ## 🏗️ Content Type Requirements
 
 ### Video Content (`type: "video"`)
