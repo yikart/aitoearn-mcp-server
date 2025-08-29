@@ -21,7 +21,7 @@ export default function init() {
             desc: z.string().nullable().optional().transform(val => !val ? undefined : val).describe("Optional description or caption for the content"),
             videoUrl: z.string().nullable().optional().transform(val => !val ? undefined : val).describe("Video file URL (required for video type content)"),
             coverUrl: z.string().describe("Cover image URL for the content thumbnail"),
-            imgUrlList: z.string().nullable().optional().transform(val => !val ? undefined : val.split(',')).describe("Comma-separated list of image URLs (required for article type content)"),
+            imgUrlList: z.string().optional().describe("Comma-separated list of image URLs (required for article type content)"),
             publishTime: z.string().nullable().optional().transform(val => !val ? undefined : val).describe("Optional scheduled publish time in format 'YYYY-MM-DD HH:mm:ss'"),
             topics: z.string().describe("Comma-separated list of topics or hashtags for content categorization"),
         },

@@ -11,7 +11,7 @@ export interface NewPublishData {
   type: PublishType;
   videoUrl?: string;
   coverUrl: string;
-  imgUrlList?: string[];
+  imgUrlList?: string;
   publishTime?: string;
   topics: string;
 }
