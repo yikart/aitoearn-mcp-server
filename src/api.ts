@@ -1,7 +1,6 @@
 import { NewPublishData, SkKeyRefAccount } from "./common.js";
 
-// const BASE_URL = 'https://mcp.aitoearn.ai';
-const BASE_URL = 'https://mcp.dev.aitoearn.ai';
+const BASE_URL = 'https://mcp.aitoearn.ai';
 
 /**
  * 获取账号列表
