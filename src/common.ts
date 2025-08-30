@@ -23,3 +23,14 @@ export interface SkKeyRefAccount {
   accountType: string;
   id: string;
 }
+
+export interface Task {
+  flowId: string;
+  accountId: string;
+  title: string;
+  type: PublishType;
+  publishTime: string;
+  status: number;
+  errorMsg: string;
+  createdAt: string;
+}

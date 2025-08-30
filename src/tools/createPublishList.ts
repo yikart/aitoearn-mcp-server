@@ -109,6 +109,11 @@ export default function init() {
                 let failureCount = 0;
 
                 const flowId = `mcp_${uuid()}`;
+                resContent.content.push({
+                    type: "text",
+                    text: `The list pubulish Flow: ${flowId})`,
+                });
+
                 for (let i = 0; i < accountList.length; i++) {
                     const account = accountList[i];
                     try {

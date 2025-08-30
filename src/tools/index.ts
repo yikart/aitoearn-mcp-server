@@ -3,6 +3,7 @@ import initGetAccountList from "./getAccountList.js";
 import initCreatePublish from "./createPublish.js";
 import initCreatePublishList from "./createPublishList.js";
 import initOpenAitoearnWebsite from "./openAitoearnWebsite.js";
+import initGetPublishTaskList from "./getPublishTaskList.js";
 import initGetSkKey from "./getSkKey.js";
 
 export default function init() {
@@ -11,5 +12,6 @@ export default function init() {
     initCreatePublishList()
     // initOpenAitoearnWebsite()
     initGetSkKey()
+    initGetPublishTaskList()
 }
 
