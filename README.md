@@ -81,18 +81,14 @@ npm start
 
 ### Available Tools
 
-#### 1. get-account-list
-Retrieve a list of social media accounts associated with your API key.
+#### 1. get-skKey
+Open Aitoearn platform website for account management and platform access.
+
+#### 2. create-publish-list
+Batch publish content to all accounts associated with your API key.
 
 **Parameters:**
 - `skKey` (string): Your AiToEarn API key
-
-#### 2. create-publish
-Create and publish content to a specific social media account.
-
-**Parameters:**
-- `skKey` (string): Your AiToEarn API key
-- `accountId` (string): Target account ID
 - `type` (string): Content type ("video" or "article")
 - `title` (string): Content title
 - `coverUrl` (string): Cover image URL
@@ -101,12 +97,6 @@ Create and publish content to a specific social media account.
 - `videoUrl` (string): Video URL (required for video type)
 - `imgUrlList` (string): Comma-separated image URLs (required for article type)
 - `publishTime` (string, optional): Scheduled publish time
-
-#### 3. create-publish-list
-Batch publish content to all accounts associated with your API key.
-
-**Parameters:**
-Same as `create-publish` except `accountId` is not required (publishes to all accounts).
 
 **Example (Video):**
 ```json
@@ -131,12 +121,6 @@ Same as `create-publish` except `accountId` is not required (publishes to all ac
   "topics": "technology,innovation"
 }
 ```
-
-#### 4. open-aitoearn-website
-Open the AiToEarn platform website for account management and platform access.
-
-**Parameters:**
-None required.
 
 ### MCP Client Configuration
 
