@@ -62,14 +62,14 @@ export async function apiPublishCreate(skKey: string, newData: NewPublishData) {
 }
 
 /**
- * 获取账号列表
+ * 获取发布任务列表
  * @param skKey
  * @param flowId
  * @returns 
  */
 export async function apiGetPublistTaskList(skKey: string, flowId: string): Promise<Task[]> {
     try {
-        const response = await fetch(`${BASE_URL}/plugin/task/list/${flowId}`, {
+        const response = await fetch(`${BASE_URL}/publish/plugin/task/list/${flowId}`, {
             method: 'GET',
             headers: {
                 'sk-key': `${skKey}`,
