@@ -69,7 +69,7 @@ export async function apiPublishCreate(skKey: string, newData: NewPublishData) {
  */
 export async function apiGetPublistTaskList(skKey: string, flowId: string): Promise<Task[]> {
     try {
-        const response = await fetch(`${BASE_URL}/publish/plugin/task/list/${flowId}`, {
+        const response = await fetch(`${BASE_URL}/plugin/publish/task/list/${flowId}`, {
             method: 'GET',
             headers: {
                 'sk-key': `${skKey}`,

@@ -1,10 +1,9 @@
 import { z } from "zod";
 import { PublishType } from "../common.js";
 import { apiGetAccountList, apiPublishCreate } from "../api.js";
-import { uuid } from "zod/v4";
 import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { server } from "../server.js";
-
+import { v4 as uuidv4 } from 'uuid';
 
 export default function init() {
     /**
@@ -108,7 +107,7 @@ export default function init() {
                 let successCount = 0;
                 let failureCount = 0;
 
-                const flowId = `mcp_${uuid()}`;
+                const flowId = `mcp_${uuidv4()}`;
                 resContent.content.push({
                     type: "text",
                     text: `The list pubulish Flow: ${flowId})`,
