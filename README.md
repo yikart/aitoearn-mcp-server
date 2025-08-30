@@ -122,6 +122,21 @@ Batch publish content to all accounts associated with your API key.
 }
 ```
 
+#### 3. get-publish-task-list
+Get the list of published tasks
+
+**参数：**
+- `skKey` (string): Your AiToEarn API key
+- `flowId` (string): The flow ID returned during batch release
+
+**示例**
+```json
+{
+  "skKey": "sk-YOUR_API_KEY_HERE",
+  "flowId": "flowId",
+}
+```
+
 ### MCP Client Configuration
 
 #### Claude Desktop
