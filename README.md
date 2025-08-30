@@ -1,4 +1,4 @@
-# AiToEarn MCP
+# AiToEarn MCP [中文文档](开发文档.md)
 
 A Model Context Protocol (MCP) server that provides social media publishing and account management capabilities for AI-driven content creation and automation.
 
@@ -87,12 +87,56 @@ Retrieve a list of social media accounts associated with your API key.
 **Parameters:**
 - `skKey` (string): Your AiToEarn API key
 
-**Example:**
+#### 2. create-publish
+Create and publish content to a specific social media account.
+
+**Parameters:**
+- `skKey` (string): Your AiToEarn API key
+- `accountId` (string): Target account ID
+- `type` (string): Content type ("video" or "article")
+- `title` (string): Content title
+- `coverUrl` (string): Cover image URL
+- `topics` (string): Comma-separated topics/hashtags
+- `desc` (string, optional): Content description
+- `videoUrl` (string): Video URL (required for video type)
+- `imgUrlList` (string): Comma-separated image URLs (required for article type)
+- `publishTime` (string, optional): Scheduled publish time
+
+#### 3. create-publish-list
+Batch publish content to all accounts associated with your API key.
+
+**Parameters:**
+Same as `create-publish` except `accountId` is not required (publishes to all accounts).
+
+**Example (Video):**
 ```json
 {
-  "skKey": "sk-YOUR_API_KEY_HERE"
+  "skKey": "sk-YOUR_API_KEY_HERE",
+  "type": "video",
+  "title": "My Amazing Video",
+  "videoUrl": "https://example.com/video.mp4",
+  "coverUrl": "https://example.com/cover.jpg",
+  "topics": "lifestyle,entertainment"
 }
 ```
+
+**Example (Article):**
+```json
+{
+  "skKey": "sk-YOUR_API_KEY_HERE",
+  "type": "article",
+  "title": "My Article Title",
+  "imgUrlList": "https://example.com/img1.jpg,https://example.com/img2.jpg",
+  "coverUrl": "https://example.com/cover.jpg",
+  "topics": "technology,innovation"
+}
+```
+
+#### 4. open-aitoearn-website
+Open the AiToEarn platform website for account management and platform access.
+
+**Parameters:**
+None required.
 
 ### MCP Client Configuration
 
@@ -130,69 +174,10 @@ Or if installed globally:
 
 For other MCP clients, refer to their documentation on how to configure MCP servers. The server runs over stdio transport.
 
-
-#### 2. create-publish
-Create and publish content to a specific social media account.
-
-**Parameters:**
-- `skKey` (string): Your AiToEarn API key
-- `accountId` (string): Target account ID
-- `type` (string): Content type ("video" or "article")
-- `title` (string): Content title
-- `coverUrl` (string): Cover image URL
-- `topics` (string): Comma-separated topics/hashtags
-- `desc` (string, optional): Content description
-- `videoUrl` (string): Video URL (required for video type)
-- `imgUrlList` (string): Comma-separated image URLs (required for article type)
-- `publishTime` (string, optional): Scheduled publish time
-
-**Example (Video):**
-```json
-{
-  "skKey": "sk-YOUR_API_KEY_HERE",
-  "accountId": "account123",
-  "type": "video",
-  "title": "My Amazing Video",
-  "videoUrl": "https://example.com/video.mp4",
-  "coverUrl": "https://example.com/cover.jpg",
-  "topics": "lifestyle,entertainment"
-}
-```
-
-**Example (Article):**
-```json
-{
-  "skKey": "sk-YOUR_API_KEY_HERE",
-  "accountId": "account123",
-  "type": "article",
-  "title": "My Article Title",
-  "imgUrlList": "https://example.com/img1.jpg,https://example.com/img2.jpg",
-  "coverUrl": "https://example.com/cover.jpg",
-  "topics": "technology,innovation"
-}
-```
-
-#### 3. create-publish-list
-Batch publish content to all accounts associated with your API key.
-
-**Parameters:**
-Same as `create-publish` except `accountId` is not required (publishes to all accounts).
-
-#### 4. open-aitoearn-website
-Open the AiToEarn platform website for account management and platform access.
-
-**Parameters:**
-None required.
-
-**Example:**
-```json
-{}
-```
-
 **Description:**
 This tool provides information about the AiToEarn platform (https://aitoearn.ai) including:
 - Account management and configuration
-- Content creation and scheduling  
+- Content creation and scheduling
 - Analytics and performance tracking
 - API key management
 - Social media account integration
@@ -200,7 +185,7 @@ This tool provides information about the AiToEarn platform (https://aitoearn.ai)
 ## 🏗️ Content Type Requirements
 
 ### Video Content (`type: "video"`)
-- **Required**: `videoUrl` - URL to the video file
+- **Required**: `videoUrl` - Video file URL
 - **Optional**: `imgUrlList` - Additional images
 
 ### Article Content (`type: "article"`)
@@ -228,34 +213,12 @@ npm run build
 npm run dev
 ```
 
-## 📝 API Reference
-
-The server integrates with the AiToEarn API:
-
-- **Account List Endpoint**: `GET http://127.0.0.1:7001/plugin/account/list`
-- **Publish Endpoint**: `POST http://127.0.0.1:7001/plugin/publish/create`
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-For support and questions:
-- Create an issue on GitHub
-- Contact the AiToEarn team
-- Check the documentation in `开发文档.md`
 
 ## 🔗 Related Links
 
 - [ModelScope MCP Documentation](https://modelscope.cn/docs/mcp/create)
 - [Model Context Protocol Specification](https://spec.modelcontextprotocol.io/)
-- [AiToEarn Platform](https://aitoearn.com)
+- [AiToEarn Platform](https://aitoearn.ai)
