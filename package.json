@@ -1,6 +1,6 @@
 {
   "name": "aitoearn-mcp",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "AiToEarn MCP - A Model Context Protocol server for social media publishing and account management",
   "main": "build/index.js",
   "bin": {
